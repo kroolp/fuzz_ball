@@ -46,7 +46,6 @@ VALUE method_initialize(VALUE self, VALUE needle, VALUE candidate) {
   }
 
   assign_cells(mat, c_needle, c_candidate, n_needle, n_candidate, &i_max, &j_max, &max_score);
-  recurse_optimal_path(mat, i_max, j_max, alignment);
 
   rb_iv_set(self, "@alignment", alignment);
   rb_iv_set(self, "@score", DBL2NUM(max_score));
@@ -167,45 +166,5 @@ void assign_cells(
         *j_max     = j;
       }
     }
-  }
-}
-
-/* recurse_optimal_path
- *
- * This method searches the alignment matrix from a starting point,
- * and recursively walks backwards, maximizing the score at each step.
- * This will result in an alignment of greatest score.
- */
-void recurse_optimal_path(double **mat, int i, int j, VALUE alignment) {
-  int ii, jj;
-  double max_value;
-
-  // Push current position of the alignment into the array that stores it.
-  rb_ary_push(alignment, INT2NUM(i));
-  rb_ary_push(alignment, INT2NUM(j));
-
-  max_value = max3(mat[i-1][j-1], mat[i-1][j], mat[i][j-1]);
-
-  if (max_value == mat[i-1][j]) {
-    ii = i-1;
-    jj = j;
-  }
-
-  if (max_value == mat[i][j-1]) {
-    ii = i;
-    jj = j-1;
-  }
-
-  if (max_value == mat[i-1][j-1]) {
-    ii = i-1;
-    jj = j-1;
-  }
-
-  // The recursive loop. If we reach an edge (i.e., m(i,j) == 0), then stop
-  // the recursion. Otherwise, keep going!
-  if (mat[i][j] == 0) {
-    return;
-  } else {
-    return recurse_optimal_path(mat, ii, jj, alignment);
   }
 }

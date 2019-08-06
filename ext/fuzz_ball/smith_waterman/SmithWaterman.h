@@ -10,7 +10,6 @@ void Init_smith_waterman();
 VALUE method_initialize(VALUE self, VALUE needle, VALUE candidate);
 
 void assign_cells(double **mat, int *needle, int *candidate, int n_needle, int n_candidate, int *i_max, int *j_max, double *max_score);
-void recurse_optimal_path(double **mat, int i, int j, VALUE alignment);
 void alloc_vars(double ***mat, int **needle, int **candidate, int n_needle, int n_candidate);
 void free_vars(double ***mat, int **needle, int **candidate, int n_needle, int n_candidate);
 
